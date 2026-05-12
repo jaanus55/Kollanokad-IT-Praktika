@@ -1,0 +1,18 @@
+---
+# Uuendab Ubuntu ja CentOS serverid.
+- name: Uuenda kõik Linuxi serverid
+  hosts: linux_servers
+  become: true
+  tasks:
+    - name: Uuenda Ubuntu paketid
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+        autoremove: true
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Uuenda CentOS paketid
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      when: ansible_facts['os_family'] == 'RedHat'
